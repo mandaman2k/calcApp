@@ -1,0 +1,33 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  #wrapper
+    
+    h2 Coin List
+    #coinList
+      table
+        thead
+          tr
+            th CoinName
+            th ConTicker
+            th address
+            th PriceBTC
+            th balance
+        tbody
+
+    h2 Add Coin
+    #addCoin
+      fieldset
+        input#inputCoinName(type='text', placeholder='Nombre')
+        input#inputCoinTicker(type='text', placeholder='Ticker')
+        br
+        input#inputCoinAddress(type='text', placeholder='Address')
+        input#inputCoinExplorer(type='text', placeholder='Explorer')
+        br
+        input#inputCoinPool(type='text', placeholder='Pool')
+        input#inputCoinExchange(type='text', placeholder='Exchange')
+        br
+        button#btnAddUser Add Coin
