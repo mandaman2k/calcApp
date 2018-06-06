@@ -1,9 +1,9 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-
+  h1 Price
+  p USD: $#{usd}
+  p MXN: $#{mxn} 
   #wrapper
     
     h2 Coin List
@@ -11,11 +11,22 @@ block content
       table
         thead
           tr
-            th CoinName
-            th ConTicker
-            th address
-            th PriceBTC
-            th balance
+            th Name
+            th Ticker
+            th Address
+            th Price BTC
+            th Balance
+        tbody
+
+    h2 Paid 24hr
+    #PaidList
+      table
+        thead
+          tr
+            th Name
+            th Ticker
+            th Address
+            th Paid
         tbody
 
     h2 Add Coin

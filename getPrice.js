@@ -7,6 +7,7 @@ var monk = require('monk');
 var db = monk('localhost:27017/calc');
 
 var coins = db.get('coins');
+var fiat = db.get('fiat');
 var dbExchanges = db.get('exchanges');
 
 dbExchanges.find({}).each((exchange, { close, pause, resume }) => {
@@ -21,7 +22,7 @@ dbExchanges.find({}).each((exchange, { close, pause, resume }) => {
                         json: true
                     }).then(function (response) {
                         coins.findOneAndUpdate({ address: coin.address }, { $set: { "price": response.Data.BidPrice } }, function (err, doc, next) {
-                            console.log(doc); 
+                            console.log(doc);
                         });
                     }).catch(function (err) {
                         db.close();
@@ -53,6 +54,50 @@ dbExchanges.find({}).each((exchange, { close, pause, resume }) => {
         }
         db.close();
     });
+}).then(() => {
+    console.log('end');
+    // stream is over
+});
+
+fiat.find({}).each((coin, { close, pause, resume }) => {
+    db.close();
+    switch (coin.name) {
+        case "MXN":
+            rp({
+                method: 'GET',
+                uri: coin.api,
+                json: true
+            }).then(function (response) {
+                fiat.findOneAndUpdate({ name: "MXN" }, { $set: { "price": response.payload.bid } }, function (err, doc, next) {
+                    console.log(doc);
+                });
+            }).catch(function (err) {
+                db.close();
+                throw err;
+            });
+            break;
+        case "USD":
+            rp({
+                method: 'GET',
+                uri: coin.api,
+                json: true
+            }).then(function (response) {
+                fiat.findOneAndUpdate({ name: "USD" }, { $set: { "price": response[0].price_usd } }, function (err, doc, next) {
+                    console.log(doc);
+                });
+            }).catch(function (err) {
+                db.close();
+                throw err;
+            });
+            break;
+
+        default:
+            db.close();
+            break;
+    }
+}).then(() => {
+    console.log('end');
+    // stream is over
 });
 
 function findElement(arr, propName, propValue) {
