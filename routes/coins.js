@@ -32,6 +32,8 @@ router.get('/totales', function (req, res, next) {
   }, {
     $skip: 0
   }])
+}, function (e, docs) {
+  res.json(docs);
 })
 
 router.post('/add', function (req, res) {
