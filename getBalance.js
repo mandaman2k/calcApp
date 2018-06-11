@@ -1,28 +1,72 @@
 var Request = require("request");
 var rp = require('request-promise');
 
-// Database
-var mongo = require('mongodb');
-var monk = require('monk');
-var db = monk('localhost:27017/calc');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://127.0.0.1/calc');
 
-var coins = db.get('coins');
+mongoose.Promise = global.Promise
 
-coins.find({}).each((coin, { close, pause, resume }) => {
-    rp({
-        method: 'GET',
-        uri: coin.explorer + '/ext/getaddress/' + coin.address,
-        json: true
-    }).then(function (response) {
-        coins.findOneAndUpdate({ address: coin.address }, { $set: { "balance": response.balance } }, function (err, doc, next) {
-            //console.log(err);
-            console.log(doc);
-            db.close();
+var db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+var Schema = mongoose.Schema;
+
+var coinSchema = new Schema({
+    name: String,
+    ticker: String,
+    address: String,
+    explorer: String,
+    pool: String,
+    exchange: String,
+    balance: Number,
+    price: Number
+});
+
+var coinModel = mongoose.model('coins', coinSchema);
+
+var coin = coinModel;
+
+var count;
+
+coin.find({}, function (err, coins) {
+    if (err) throw err;
+    count = coins.length;
+    coins.forEach(element => {
+        rp({
+            method: 'GET',
+            uri: element.explorer + '/ext/getaddress/' + element.address,
+            json: true,
+            followRedirect: true,
+            simple: false
+        }).then(function (response) {
+            count = count - 1
+            console.log(count + ' ' + element.name);
+            coin.findOne({ address: element.address }, function (err, result) {
+                if (err) throw err;
+
+                if (!isNaN(response.balance)) {
+                    result.balance = parseFloat(response.balance).toFixed(8);
+
+                    result.save(function (err) {
+                        if (err) throw err;
+                        if (count == 0) {
+                            mongoose.disconnect();
+                        }
+                    })
+                } else {
+                    if (count == 0) {
+                        mongoose.disconnect();
+                    }
+                }
+            })
+        }).catch(function (err) {
+            count = count - 1;
+            console.log(count + ' ' + element.name);
+            throw err;
+            if (count == 0) {
+                mongoose.disconnect();
+            }
         });
-    }).catch(function (err) {
-        throw err;
     });
-}).then(() => {
-    console.log('end');
-    // stream is over
 });

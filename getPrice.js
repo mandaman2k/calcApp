@@ -6,98 +6,108 @@ var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk('localhost:27017/calc');
 
-var coins = db.get('coins');
+var dbCoins = db.get('coins');
 var fiat = db.get('fiat');
 var dbExchanges = db.get('exchanges');
 
-dbExchanges.find({}).each((exchange, { close, pause, resume }) => {
-    coins.find({ exchange: exchange.name }, {}, function (err, result) {
-        db.close();
-        switch (exchange.name) {
-            case "cryptopia":
-                result.forEach(coin => {
-                    rp({
-                        method: 'GET',
-                        uri: exchange.api + '/' + coin.ticker + '_BTC',
-                        json: true
-                    }).then(function (response) {
-                        coins.findOneAndUpdate({ address: coin.address }, { $set: { "price": response.Data.BidPrice } }, function (err, doc, next) {
-                            console.log(doc);
-                        });
-                    }).catch(function (err) {
-                        db.close();
-                        throw err;
-                    });
+rp({
+    method: 'GET',
+    uri: 'https://www.cryptopia.co.nz/api/GetMarkets',
+    json: true
+}).then(function (response) {
+    dbCoins.find({ "exchange": "cryptopia" }, {}, function (err, result) {
+        db.close(function () {
+            console.log('cerre 7 ');
+        });
+        result.forEach(coin => {
+            dbCoins.findOneAndUpdate({ address: coin.address }, { $set: { "price": parseFloat(findElement(response.Data, "Label", coin.ticker + "/BTC").BidPrice).toFixed(8) } }, function (err, doc, next) {
+                db.close(function () {
+                    console.log('cerre 8 ' + coin.name);
                 });
-                break;
-            case "CB":
-                rp({
-                    method: 'GET',
-                    uri: 'https://api.crypto-bridge.org/api/v1/ticker',
-                    json: true
-                }).then(function (response) {
-                    result.forEach(coin => {
-                        coins.findOneAndUpdate({ address: coin.address }, { $set: { "price": findElement(response, "id", coin.ticker + "_BTC").bid } }, function (err, doc, next) {
-                            console.log(doc);
-                            db.close();
-                        });
-                    });
-                }).catch(function (err) {
-                    db.close();
-                    throw err;
-                });
-                break;
-
-            default:
-                db.close();
-                break;
-        }
-        db.close();
-    });
-}).then(() => {
-    console.log('end');
-    // stream is over
+            });
+        });
+    })
 });
 
-fiat.find({}).each((coin, { close, pause, resume }) => {
-    db.close();
-    switch (coin.name) {
-        case "MXN":
-            rp({
-                method: 'GET',
-                uri: coin.api,
-                json: true
-            }).then(function (response) {
-                fiat.findOneAndUpdate({ name: "MXN" }, { $set: { "price": response.payload.bid } }, function (err, doc, next) {
-                    console.log(doc);
+rp({
+    method: 'GET',
+    uri: 'https://api.crypto-bridge.org/api/v1/ticker',
+    json: true
+}).then(function (response) {
+    dbCoins.find({ "exchange": "CB" }, {}, function (err, result) {
+        db.close(function () {
+            console.log('cerre 1 ');
+        });
+        result.forEach(coin => {
+            dbCoins.findOneAndUpdate({ address: coin.address }, { $set: { "price": parseFloat(findElement(response, "id", coin.ticker + "_BTC").bid).toFixed(8) } }, function (err, doc, next) {
+                db.close(function () {
+                    console.log('cerre 2 ' + coin.name);
                 });
-            }).catch(function (err) {
-                db.close();
-                throw err;
             });
-            break;
-        case "USD":
-            rp({
-                method: 'GET',
-                uri: coin.api,
-                json: true
-            }).then(function (response) {
-                fiat.findOneAndUpdate({ name: "USD" }, { $set: { "price": response[0].price_usd } }, function (err, doc, next) {
-                    console.log(doc);
-                });
-            }).catch(function (err) {
-                db.close();
-                throw err;
-            });
-            break;
+        });
+    })
+});
 
-        default:
-            db.close();
-            break;
-    }
-}).then(() => {
-    console.log('end');
-    // stream is over
+rp({
+    method: 'GET',
+    uri: 'https://stocks.exchange/api2/ticker',
+    json: true
+}).then(function (response) {
+    dbCoins.find({ "exchange": "stocks.exchange" }, {}, function (err, result) {
+        db.close(function () {
+            console.log('cerre 3 ');
+        });
+        result.forEach(coin => {
+            dbCoins.findOneAndUpdate({ address: coin.address }, { $set: { "price": parseFloat(findElement(response, "market_name", coin.ticker + "_BTC").bid).toFixed(8) } }, function (err, doc, next) {
+                db.close(function () {
+                    console.log('cerre 4 ' + coin.name);
+                });
+            });
+        });
+    })
+});
+
+rp({
+    method: 'GET',
+    uri: 'https://graviex.net:443//api/v2/tickers.json',
+    json: true
+}).then(function (response) {
+    dbCoins.find({ "exchange": "graviex" }, {}, function (err, result) {
+        db.close(function () {
+            console.log('cerre 5 ');
+        });
+        result.forEach(coin => {
+            dbCoins.findOneAndUpdate({ address: coin.address }, { $set: { "price": parseFloat(response[coin.ticker.toLowerCase() + 'btc'].ticker.buy).toFixed(8) } }, function (err, doc, next) {
+                db.close(function () {
+                    console.log('cerre 6 ' + coin.name);
+                });
+            });
+        });
+    })
+});
+
+rp({
+    method: 'GET',
+    uri: 'https://api.bitso.com/v3/ticker/?book=btc_mxn',
+    json: true
+}).then(function (response) {
+    fiat.findOneAndUpdate({ name: "MXN" }, { $set: { "price": parseFloat(response.payload.bid).toFixed(2) } }, function (err, doc, next) {
+        db.close(function () {
+            console.log('cerre 9 ');
+        });
+    });
+});
+
+rp({
+    method: 'GET',
+    uri: 'https://api.coinmarketcap.com/v1/ticker/bitcoin',
+    json: true
+}).then(function (response) {
+    fiat.findOneAndUpdate({ name: "USD" }, { $set: { "price": parseFloat(response[0].price_usd).toFixed(2) } }, function (err, doc, next) {
+        db.close(function () {
+            console.log('cerre 10 ');
+        });
+    });
 });
 
 function findElement(arr, propName, propValue) {
