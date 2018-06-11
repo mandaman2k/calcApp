@@ -17,7 +17,7 @@ function populateTable() {
                 tableContent += '<td class="tg-6k2t"><a href="#" class="linkshowuser" rel="' + this.name + '">' + this.name + '</a></td>';
                 tableContent += '<td class="tg-6k2t">' + this.ticker + '</td>';
                 tableContent += '<td class="tg-6k2t">' + this.address + '</td>';
-                tableContent += '<td class="tg-6k2t">' + this.price + '</td>';
+                tableContent += '<td class="tg-6k2t">' + Number(this.price).toFixed(8) + '</td>';
                 tableContent += '<td class="tg-6k2t">' + this.balance + '</td>';
                 tableContent += '</tr>';
                 count++;
@@ -26,7 +26,7 @@ function populateTable() {
                 tableContent += '<td class="tg-yw4l"><a href="#" class="linkshowuser" rel="' + this.name + '">' + this.name + '</a></td>';
                 tableContent += '<td class="tg-yw4l">' + this.ticker + '</td>';
                 tableContent += '<td class="tg-yw4l">' + this.address + '</td>';
-                tableContent += '<td class="tg-yw4l">' + this.price + '</td>';
+                tableContent += '<td class="tg-yw4l">' + Number(this.price).toFixed(8) + '</td>';
                 tableContent += '<td class="tg-yw4l">' + this.balance + '</td>';
                 tableContent += '</tr>';
                 count++;
