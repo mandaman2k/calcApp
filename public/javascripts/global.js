@@ -8,21 +8,40 @@ $(document).ready(function () {
 function populateTable() {
 
     var tableContent = '';
-
+    var count = 1;
     $.getJSON('/coins/list', function (data) {
+
         $.each(data, function () {
-            console.log(this.name);
-            tableContent += '<tr>';
-            tableContent += '<td><a href="#" class="linkshowuser" rel="' + this.name + '">' + this.name + '</a></td>';
-            tableContent += '<td>' + this.ticker + '</td>';
-            tableContent += '<td>' + this.address + '</td>';
-            tableContent += '<td>' + this.price + '</td>';
-            tableContent += '<td>' + this.balance + '</td>';
-            tableContent += '</tr>';
+            if (isEven(count)) {
+                tableContent += '<tr>';
+                tableContent += '<td class="tg-6k2t"><a href="#" class="linkshowuser" rel="' + this.name + '">' + this.name + '</a></td>';
+                tableContent += '<td class="tg-6k2t">' + this.ticker + '</td>';
+                tableContent += '<td class="tg-6k2t">' + this.address + '</td>';
+                tableContent += '<td class="tg-6k2t">' + this.price + '</td>';
+                tableContent += '<td class="tg-6k2t">' + this.balance + '</td>';
+                tableContent += '</tr>';
+                count++;
+            } else {
+                tableContent += '<tr>';
+                tableContent += '<td class="tg-yw4l"><a href="#" class="linkshowuser" rel="' + this.name + '">' + this.name + '</a></td>';
+                tableContent += '<td class="tg-yw4l">' + this.ticker + '</td>';
+                tableContent += '<td class="tg-yw4l">' + this.address + '</td>';
+                tableContent += '<td class="tg-yw4l">' + this.price + '</td>';
+                tableContent += '<td class="tg-yw4l">' + this.balance + '</td>';
+                tableContent += '</tr>';
+                count++;
+            }
         });
 
         $('#coinList table tbody').html(tableContent);
     });
+}
+
+function isEven(value) {
+    if (value % 2 == 0)
+        return true;
+    else
+        return false;
 }
 
 function addCoin(event) {
