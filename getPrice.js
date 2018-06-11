@@ -114,7 +114,7 @@ rp({
 }).then(function (response) {
     coin.find({ exchange: "stocks.exchange" }, function (err, coins) {
         var count = coins.length;
-        if (condition) {
+        if (count > 0) {
             coins.forEach(element => {
                 coin.findOneAndUpdate({ address: element.address }, { price: Number(findElement(response, "market_name", element.ticker + "_BTC").bid).toFixed(8).replace(/\.?0+$/, "") }, function (err) {
                     if (err) throw err;
