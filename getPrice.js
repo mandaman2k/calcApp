@@ -5,7 +5,7 @@ var rp = require('request-promise');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1/calc');
 
-mongoose.Promise = global.Promise
+mongoose.Promise = global.Promise;
 
 var db = mongoose.connection;
 
@@ -54,17 +54,25 @@ rp({
 }).then(function (response) {
     coin.find({ exchange: "cryptopia" }, function (err, coins) {
         var count = coins.length;
-        coins.forEach(element => {
-            coin.findOneAndUpdate({ address: element.address }, { price: parseFloat(findElement(response.Data, "Label", element.ticker + "/BTC").BidPrice).toFixed(8) }, function (err) {
-                if (err) throw err;
-                count = count - 1;
-                if (count == 0) {
-                    finished(1);
-                }
+        if (count > 0) {
+            coins.forEach(element => {
+                coin.findOneAndUpdate({ address: element.address }, { price: parseFloat(findElement(response.Data, "Label", element.ticker + "/BTC").BidPrice).toFixed(8) }, function (err) {
+                    if (err) throw err;
+                    count = count - 1;
+                    if (count == 0) {
+                        console.log('cryptopia');
+                        finished(1);
+                    }
+                });
             });
-        });
+        } else {
+            console.log('cryptopia');
+            finished(1);
+        }
     });
 }).catch(function (err) {
+    console.log('cryptopia');
+    finished(1);
     throw err;
 });
 
@@ -75,17 +83,26 @@ rp({
 }).then(function (response) {
     coin.find({ exchange: "CB" }, function (err, coins) {
         var count = coins.length;
-        coins.forEach(element => {
-            coin.findOneAndUpdate({ address: element.address }, { price: Number(findElement(response, "id", element.ticker + "_BTC").bid).toFixed(8).replace(/\.?0+$/, "") }, function (err) {
-                if (err) throw err;
-                count = count - 1;
-                if (count == 0) {
-                    finished(1);
-                }
+        if (count > 0) {
+            coins.forEach(element => {
+                coin.findOneAndUpdate({ address: element.address }, { price: Number(findElement(response, "id", element.ticker + "_BTC").bid).toFixed(8).replace(/\.?0+$/, "") }, function (err) {
+                    if (err) throw err;
+                    count = count - 1;
+                    if (count == 0) {
+                        console.log('CB');
+                        finished(1);
+                    }
+                });
             });
-        });
+        } else {
+            console.log('CB');
+            finished(1);
+        }
+
     });
 }).catch(function (err) {
+    console.log('CB');
+    finished(1);
     throw err;
 });
 
@@ -97,17 +114,25 @@ rp({
 }).then(function (response) {
     coin.find({ exchange: "stocks.exchange" }, function (err, coins) {
         var count = coins.length;
-        coins.forEach(element => {
-            coin.findOneAndUpdate({ address: element.address }, { price: Number(findElement(response, "market_name", element.ticker + "_BTC").bid).toFixed(8).replace(/\.?0+$/, "") }, function (err) {
-                if (err) throw err;
-                count = count - 1;
-                if (count == 0) {
-                    finished(1);
-                }
+        if (condition) {
+            coins.forEach(element => {
+                coin.findOneAndUpdate({ address: element.address }, { price: Number(findElement(response, "market_name", element.ticker + "_BTC").bid).toFixed(8).replace(/\.?0+$/, "") }, function (err) {
+                    if (err) throw err;
+                    count = count - 1;
+                    if (count == 0) {
+                        console.log('stocks.exchange');
+                        finished(1);
+                    }
+                });
             });
-        });
+        } else {
+            console.log('stocks.exchange');
+            finished(1);
+        }
     });
 }).catch(function (err) {
+    console.log('stocks.exchange');
+    finished(1);
     throw err;
 });
 
@@ -125,15 +150,19 @@ rp({
                     if (err) throw err;
                     count = count - 1;
                     if (count == 0) {
+                        console.log('graviex');
                         finished(1);
                     }
                 });
             });
         } else {
+            console.log('graviex');
             finished(1);
         }
     });
 }).catch(function (err) {
+    console.log('graviex');
+    finished(1);
     throw err;
 });
 
@@ -145,8 +174,13 @@ rp({
 }).then(function (response) {
     fiat.findOneAndUpdate({ name: "MXN" }, { $set: { price: parseFloat(response.payload.bid).toFixed(2) } }, function (err) {
         if (err) throw err;
+        console.log('MXN');
         finished(1);
     });
+}).catch(function (err) {
+    console.log('MXN');
+    finished(1);
+    throw err;
 });
 
 
@@ -157,8 +191,13 @@ rp({
 }).then(function (response) {
     fiat.findOneAndUpdate({ name: "USD" }, { price: parseFloat(response[0].price_usd).toFixed(2) }, function (err) {
         if (err) throw err;
+        console.log('USD');
         finished(1);
     });
+}).catch(function (err) {
+    console.log('USD');
+    finished(1);
+    throw err;
 });
 
 function findElement(arr, propName, propValue) {

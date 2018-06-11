@@ -4,7 +4,7 @@ var rp = require('request-promise');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1/calc');
 
-mongoose.Promise = global.Promise
+mongoose.Promise = global.Promise;
 
 var db = mongoose.connection;
 
@@ -40,7 +40,7 @@ coin.find({}, function (err, coins) {
             followRedirect: true,
             simple: false
         }).then(function (response) {
-            count = count - 1
+            count = count - 1;
             console.log(count + ' ' + element.name);
             coin.findOne({ address: element.address }, function (err, result) {
                 if (err) throw err;
@@ -53,20 +53,20 @@ coin.find({}, function (err, coins) {
                         if (count == 0) {
                             mongoose.disconnect();
                         }
-                    })
+                    });
                 } else {
                     if (count == 0) {
                         mongoose.disconnect();
                     }
                 }
-            })
+            });
         }).catch(function (err) {
             count = count - 1;
             console.log(count + ' ' + element.name);
-            throw err;
             if (count == 0) {
                 mongoose.disconnect();
             }
+            throw err;
         });
     });
 });
