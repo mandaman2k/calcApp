@@ -52,4 +52,27 @@ router.post('/add', function (req, res) {
   });
 });
 
+router.delete('/delete/:id', function (req, res) {
+  var db = req.db;
+  var collection = db.get('coins');
+  var coinToDelete = req.params.id;
+  collection.remove({ '_id': coinToDelete }, function (err) {
+    res.send((err === null) ? { msg: '' } : { msg: 'error: ' + err });
+  });
+});
+
+router.put('/update/:id', function (req, res, next) {
+  var db = req.db;
+  var collection = db.get('coins');
+  var coinToUpdate = req.params.id;
+  var coinBalance = Number(req.body.balance);
+  var a = 1;
+  if (coinToUpdate == 'BTC') {
+    collection.update({ ticker: 'BTC' }, { $set: { "balance": coinBalance } }, function (err) {
+      if (err) throw err;
+      res.send((err === null) ? {msg: ''} : {msg: 'error' + err});
+    });
+  }
+});
+
 module.exports = router;

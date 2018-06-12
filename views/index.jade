@@ -20,6 +20,7 @@ block content
               th.tg-yw4l Balance
               th.tg-yw4l Explorer
               th.tg-yw4l Pool
+              th.tg-yw4l Borrar
           tbody
 
     div(style='float: right')
@@ -65,7 +66,7 @@ block content
               td
                 b= summxn
 
-  h2 Add Coin
+  h2 Agregar Moneda
   #addCoin
     fieldset
       input#inputCoinName(type='text', placeholder='Nombre')
@@ -78,3 +79,11 @@ block content
       input#inputCoinExchange(type='text', placeholder='Exchange')
       br
       button#btnAddUser Add Coin
+
+  h2 Actualizar BTC
+  #updateCoin
+    fieldset
+      input#inputCoinName(type='text', value='BTC', disabled)
+      input#inputCoinBalance(type='text', placeholder='Balance')
+      br
+      button#btnActualizar Actaulizar

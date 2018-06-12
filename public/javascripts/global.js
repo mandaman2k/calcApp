@@ -3,6 +3,10 @@ var coinListData = [];
 $(document).ready(function () {
     populateTable();
     $('#btnAddUser').on('click', addCoin);
+    $('#btnActualizar').on('click', updateCoin);
+
+    // Delete User link click
+    $('#coinList table tbody').on('click', 'td a.linkdeleteuser', deleteUser);
 });
 
 function populateTable() {
@@ -15,24 +19,26 @@ function populateTable() {
             if (this.ticker != 'MXN' && this.ticker != 'USD' && this.ticker != 'BTC') {
                 if (isEven(count)) {
                     tableContent += '<tr>';
-                    tableContent += '<td class="tg-6k2t"><a href="#" class="linkshowuser" rel="' + this.name + '">' + this.name + '</a></td>';
+                    tableContent += '<td class="tg-6k2t"><b>' + this.name + '</b<</td>';
                     tableContent += '<td class="tg-6k2t">' + this.ticker + '</td>';
                     tableContent += '<td class="tg-6k2t">' + this.address + '</td>';
                     tableContent += '<td class="tg-6k2t">' + Number(this.price).toFixed(8) + '</td>';
                     tableContent += '<td class="tg-6k2t">' + this.balance + '</td>';
                     tableContent += '<td class="tg-6k2t"><a href="' + this.explorer + '/address/' + this.address + '" class="linkshowuser" rel="' + this.name + '">Explorer</a></td>';
                     tableContent += '<td class="tg-6k2t"><a href="' + this.pool + '/?address=' + this.address + '" class="linkshowuser" rel="' + this.name + '">Pool</a></td>';
+                    tableContent += '<td class="tg-6k2t"><a href="#" class="linkdeleteuser" rel="' + this._id + '">Borrar</a></td>';
                     tableContent += '</tr>';
                     count++;
                 } else {
                     tableContent += '<tr>';
-                    tableContent += '<td class="tg-yw4l"><a href="#" class="linkshowuser" rel="' + this.name + '">' + this.name + '</a></td>';
+                    tableContent += '<td class="tg-yw4l"><b>' + this.name + '</b></td>';
                     tableContent += '<td class="tg-yw4l">' + this.ticker + '</td>';
                     tableContent += '<td class="tg-yw4l">' + this.address + '</td>';
                     tableContent += '<td class="tg-yw4l">' + Number(this.price).toFixed(8) + '</td>';
                     tableContent += '<td class="tg-yw4l">' + this.balance + '</td>';
                     tableContent += '<td class="tg-yw4l"><a href="' + this.explorer + '/address/' + this.address + '" class="linkshowuser" rel="' + this.name + '">Explorer</a></td>';
                     tableContent += '<td class="tg-yw4l"><a href="' + this.pool + '/?address=' + this.address + '" class="linkshowuser" rel="' + this.name + '">Pool</a></td>';
+                    tableContent += '<td class="tg-yw4l"><a href="#" class="linkdeleteuser" rel="' + this._id + '">Borrar</a></td>';
                     tableContent += '</tr>';
                     count++;
                 }
@@ -78,6 +84,79 @@ function addCoin(event) {
                 $('#addCoin fieldset input').val('');
 
                 populateTable();
+            } else {
+                alert('Error: ' + response.msg);
+            }
+        });
+    } else {
+        alert('Please fill in all fields');
+        return false;
+    }
+}
+
+// Delete User
+function deleteUser(event) {
+
+    event.preventDefault();
+
+    // Pop up a confirmation dialog
+    var confirmation = confirm('¿Seguro?');
+
+    // Check and make sure the user confirmed
+    if (confirmation === true) {
+
+        // If they did, do our delete
+        $.ajax({
+            type: 'DELETE',
+            url: '/coins/delete/' + $(this).attr('rel')
+        }).done(function (response) {
+
+            // Check for a successful (blank) response
+            if (response.msg === '') {
+            }
+            else {
+                alert('Error: ' + response.msg);
+            }
+
+            // Update the table
+            populateTable();
+
+        });
+
+    }
+    else {
+
+        // If they said no to the confirm, do nothing
+        return false;
+
+    }
+
+};
+
+function updateCoin(event) {
+    event.preventDefault();
+
+    var errorCount = 0;
+    $('#updateCoin input').each(function (index, val) {
+        if ($(this).val() === '') { errorCount++; }
+    });
+
+    if (errorCount === 0) {
+        var coin = {
+            'name': $('#updateCoin fieldset input#inputCoinName').val().toUpperCase(),
+            'balance': $('#updateCoin fieldset input#inputCoinBalance').val()
+        };
+
+        $.ajax({
+            type: 'PUT',
+            data: coin,
+            url: '/coins/update/' + 'BTC',
+            dataType: 'JSON'
+        }).done(function (response) {
+            if (response.msg === '') {
+                $('#updateCoin fieldset input#inputBalance').val('');
+                alert('Actualizado');
+                location.reload(true);
             } else {
                 alert('Error: ' + response.msg);
             }
