@@ -3,8 +3,8 @@ extends layout
 block content
   #price
     h1 Price
-    p#usd USD: #{usd}
-    p#mxn MXN: #{mxn} 
+    p#usd USD: #{CurrUsd}
+    p#mxn MXN: #{CurrMxn} 
   
   #wrapper
     div(style='display: inline-block;')
@@ -19,6 +19,7 @@ block content
               th.tg-yw4l Price BTC
               th.tg-yw4l Balance
               th.tg-yw4l Explorer
+              th.tg-yw4l Pool
           tbody
 
     div(style='float: right')
@@ -33,13 +34,36 @@ block content
               th.tg-yw4l USD
               th.tg-yw4l MXN
           tbody
-          
-  ul
-    each val in coins
-      - var balace = val.balance
-      - var pricemxn = parseFloat(mxn)
-      - var priceusd = parseFloat(usd) 
-      li= balance * pricemxn
+            - var sumbtc=0
+            - var sumusd=0
+            - var summxn=0
+            each val in coins
+              - var pricebtc = val.price * val.balance
+              - var pricemxn = pricebtc * mxn
+              - var priceusd = pricebtc * usd
+              - sumbtc = sumbtc + pricebtc
+              - sumusd = sumusd + priceusd
+              - summxn = summxn + pricemxn
+              - priceusd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(priceusd)
+              - pricemxn = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(pricemxn)
+              tr
+                td= val.ticker
+                td= val.balance
+                td= pricebtc
+                td= priceusd
+                td= pricemxn
+            tr
+              td 
+                b Total
+              td
+              - sumusd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(sumusd)
+              - summxn = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(summxn)
+              td 
+                b= sumbtc
+              td
+                b= sumusd
+              td
+                b= summxn
 
   h2 Add Coin
   #addCoin

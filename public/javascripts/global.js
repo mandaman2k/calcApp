@@ -20,7 +20,8 @@ function populateTable() {
                     tableContent += '<td class="tg-6k2t">' + this.address + '</td>';
                     tableContent += '<td class="tg-6k2t">' + Number(this.price).toFixed(8) + '</td>';
                     tableContent += '<td class="tg-6k2t">' + this.balance + '</td>';
-                    tableContent += '<td class="tg-6k2t"><a href="' + this.explorer + '/address/' + this.address + '" class="linkshowuser" rel="' + this.name + '">' + this.explorer + '/address/' + this.address + '</a></td>';
+                    tableContent += '<td class="tg-6k2t"><a href="' + this.explorer + '/address/' + this.address + '" class="linkshowuser" rel="' + this.name + '">Explorer</a></td>';
+                    tableContent += '<td class="tg-6k2t"><a href="' + this.pool + '/?address=' + this.address + '" class="linkshowuser" rel="' + this.name + '">Pool</a></td>';
                     tableContent += '</tr>';
                     count++;
                 } else {
@@ -30,7 +31,8 @@ function populateTable() {
                     tableContent += '<td class="tg-yw4l">' + this.address + '</td>';
                     tableContent += '<td class="tg-yw4l">' + Number(this.price).toFixed(8) + '</td>';
                     tableContent += '<td class="tg-yw4l">' + this.balance + '</td>';
-                    tableContent += '<td class="tg-yw4l"><a href="' + this.explorer + '/address/' + this.address + '" class="linkshowuser" rel="' + this.name + '">' + this.explorer + '/address/' + this.address + '</a></td>';
+                    tableContent += '<td class="tg-yw4l"><a href="' + this.explorer + '/address/' + this.address + '" class="linkshowuser" rel="' + this.name + '">Explorer</a></td>';
+                    tableContent += '<td class="tg-yw4l"><a href="' + this.pool + '/?address=' + this.address + '" class="linkshowuser" rel="' + this.name + '">Pool</a></td>';
                     tableContent += '</tr>';
                     count++;
                 }
@@ -39,37 +41,6 @@ function populateTable() {
 
         $('#coinList table tbody').html(tableContent);
     });
-
-    /* $.getJSON('/coins/balance', function (data) {
-        var tableContent = '';
-        var count = 1;
-        var coins = data;
-        $.each(data, function () {
-            if (this.ticker != 'MXN' && this.ticker != 'USD') {
-                if (isEven(count)) {
-                    tableContent += '<tr>';
-                    tableContent += '<td class="tg-6k2t">' + this.ticker + '</a></td>';
-                    tableContent += '<td class="tg-6k2t">' + this.balance + '</td>';
-                    tableContent += '<td class="tg-6k2t">' + this.price*this.balance + '</td>';
-                    tableContent += '<td class="tg-6k2t"></td>';
-                    tableContent += '<td class="tg-6k2t"></td>';
-                    tableContent += '</tr>';
-                    count++;
-                } else {
-                    tableContent += '<tr>';
-                    tableContent += '<td class="tg-yw4l">' + this.ticker + '</a></td>';
-                    tableContent += '<td class="tg-yw4l">' + this.balance + '</td>';
-                    tableContent += '<td class="tg-yw4l">' + this.price*this.balance + '</td>';
-                    tableContent += '<td class="tg-yw4l"></td>';
-                    tableContent += '<td class="tg-yw4l"></td>';
-                    tableContent += '</tr>';
-                    count++;
-                }
-            }
-        });
-
-        $('#coinBalance table tbody').html(tableContent);
-    }); */
 }
 
 function isEven(value) {

@@ -35,8 +35,10 @@ router.get('/', function (req, res, next) {
 
         res.render('index', { 
             title: 'Calculo Minar Granja', 
-            mxn: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(mxn), 
-            usd: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(usd),
+            CurrMxn: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(mxn), 
+            CurrUsd: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(usd),
+            mxn: mxn, 
+            usd: usd,
             coins: docs 
         });
     });
