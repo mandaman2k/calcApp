@@ -10,31 +10,37 @@ router.get('/list', function (req, res, next) {
   });
 });
 
-router.get('/totales', function (req, res, next) {
+router.get('/balance', function (req, res, next) {
   var db = req.db;
   var collection = db.get('coins');
-  collection.aggregate([{
-    $group: {
-      _id: {
-        ticker: "$ticker",
-        price: "$price"
-      },
-      "balanceTotal" : {
-        $sum: "$balance"
+
+  var pipeline = [
+    {
+      "$group": {
+        "_id": {
+          "ticker": "$ticker",
+          "price": "$price"
+        },
+        "SUM(balance)": {
+          "$sum": "$balance"
+        }
+      }
+    },
+    {
+      "$project": {
+        "_id": 0,
+        "ticker": "$_id.ticker",
+        "price": "$_id.price",
+        "balance": "$SUM(balance)"
       }
     }
-  }, {
-    $project: {
-      ticker: "$_id.ticker",
-      price: "$_id.price",
-      "balanceTotal": "$balanceTotal"
-    }
-  }, {
-    $skip: 0
-  }])
-}, function (e, docs) {
-  res.json(docs);
-})
+  ];
+
+  collection.aggregate(pipeline, {}, function (err, docs) {
+    res.json(docs);
+  });
+
+});
 
 router.post('/add', function (req, res) {
   var db = req.db;

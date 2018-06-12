@@ -1,9 +1,11 @@
 extends layout
 
 block content
-  h1 Price
-  p USD: $#{usd}
-  p MXN: $#{mxn} 
+  #price
+    h1 Price
+    p#usd USD: $#{usd}
+    p#mxn MXN: $#{mxn} 
+  
   #wrapper
     
     h2 Coin List

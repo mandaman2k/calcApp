@@ -172,7 +172,7 @@ rp({
     uri: 'https://api.bitso.com/v3/ticker/?book=btc_mxn',
     json: true
 }).then(function (response) {
-    fiat.findOneAndUpdate({ name: "MXN" }, { $set: { price: parseFloat(response.payload.bid).toFixed(2) } }, function (err) {
+    coin.findOneAndUpdate({ name: "MXN" }, { $set: { price: parseFloat(response.payload.bid).toFixed(2) } }, function (err) {
         if (err) throw err;
         console.log('MXN');
         finished(1);
@@ -189,7 +189,7 @@ rp({
     uri: 'https://api.coinmarketcap.com/v1/ticker/bitcoin',
     json: true
 }).then(function (response) {
-    fiat.findOneAndUpdate({ name: "USD" }, { price: parseFloat(response[0].price_usd).toFixed(2) }, function (err) {
+    coin.findOneAndUpdate({ name: "USD" }, { price: parseFloat(response[0].price_usd).toFixed(2) }, function (err) {
         if (err) throw err;
         console.log('USD');
         finished(1);
