@@ -67,12 +67,12 @@ rp({
                 });
             });
         } else {
-            console.log('cryptopia');
+            console.log('Error cryptopia');
             finished(1);
         }
     });
 }).catch(function (err) {
-    console.log('cryptopia');
+    console.log('Error cryptopia');
     finished(1);
     throw err;
 });
@@ -97,13 +97,13 @@ rp({
                 });
             });
         } else {
-            console.log('CB');
+            console.log('Error CB');
             finished(1);
         }
 
     });
 }).catch(function (err) {
-    console.log('CB');
+    console.log('Error CB');
     finished(1);
     throw err;
 });
@@ -128,12 +128,12 @@ rp({
                 });
             });
         } else {
-            console.log('stocks.exchange');
+            console.log('Error stocks.exchange');
             finished(1);
         }
     });
 }).catch(function (err) {
-    console.log('stocks.exchange');
+    console.log('Error stocks.exchange');
     finished(1);
     throw err;
 });
@@ -158,12 +158,12 @@ rp({
                 });
             });
         } else {
-            console.log('graviex');
+            console.log('0 graviex');
             finished(1);
         }
     });
 }).catch(function (err) {
-    console.log('graviex');
+    console.log('Error graviex');
     finished(1);
     throw err;
 });
@@ -182,18 +182,18 @@ rp({
                     if (err) throw err;
                     count = count - 1;
                     if (count == 0) {
-                        console.log('graviex');
+                        console.log('safe.trade');
                         finished(1);
                     }
                 });
             });
         } else {
-            console.log('graviex');
+            console.log('Error safe.trade');
             finished(1);
         }
     });
 }).catch(function (err) {
-    console.log('graviex');
+    console.log('Error safe.trade');
     finished(1);
     throw err;
 });
@@ -210,7 +210,7 @@ rp({
         finished(1);
     });
 }).catch(function (err) {
-    console.log('MXN');
+    console.log('Error MXN');
     finished(1);
     throw err;
 });
@@ -227,7 +227,7 @@ rp({
         finished(1);
     });
 }).catch(function (err) {
-    console.log('USD');
+    console.log('Error USD');
     finished(1);
     throw err;
 });
