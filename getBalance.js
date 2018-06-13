@@ -73,6 +73,44 @@ coin.find({}, function (err, coins) {
                     });
                     break;
 
+                case "RVN":
+                    rp({
+                        method: 'GET',
+                        uri: element.explorer + '/api/addr/' + element.address,
+                        json: true,
+                        followRedirect: true,
+                        simple: false
+                    }).then(function (response) {
+                        count = count - 1;
+                        console.log(count + ' ' + element.name);
+                        coin.findOne({ address: element.address }, function (err, result) {
+                            if (err) throw err;
+
+                            if (!isNaN(response.balance)) {
+                                result.balance = parseFloat(response.balance).toFixed(8);
+
+                                result.save(function (err) {
+                                    if (err) throw err;
+                                    if (count == 0) {
+                                        mongoose.disconnect();
+                                    }
+                                });
+                            } else {
+                                if (count == 0) {
+                                    mongoose.disconnect();
+                                }
+                            }
+                        });
+                    }).catch(function (err) {
+                        count = count - 1;
+                        console.log(count + ' ' + element.name);
+                        if (count == 0) {
+                            mongoose.disconnect();
+                        }
+                        throw err;
+                    });
+                    break;
+
                 default:
                     rp({
                         method: 'GET',
