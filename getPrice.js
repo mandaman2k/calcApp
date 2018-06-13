@@ -42,11 +42,12 @@ var end = 0;
 
 function finished(done) {
     end = end + done;
-    if (end == 6) {
+    if (end == 7) {
         mongoose.disconnect();
     }
 }
 
+//Cryptopia
 rp({
     method: 'GET',
     uri: 'https://www.cryptopia.co.nz/api/GetMarkets',
@@ -76,6 +77,7 @@ rp({
     throw err;
 });
 
+//CB
 rp({
     method: 'GET',
     uri: 'https://api.crypto-bridge.org/api/v1/ticker',
@@ -106,7 +108,7 @@ rp({
     throw err;
 });
 
-
+//Stocks.Exchange
 rp({
     method: 'GET',
     uri: 'https://stocks.exchange/api2/ticker',
@@ -136,7 +138,7 @@ rp({
     throw err;
 });
 
-
+//Graviex
 rp({
     method: 'GET',
     uri: 'https://graviex.net/api/v2/tickers.json',
@@ -166,7 +168,37 @@ rp({
     throw err;
 });
 
+//safe.trade
+rp({
+    method: 'GET',
+    uri: 'https://safe.trade/api/v2/tickers.json',
+    json: true
+}).then(function (response) {
+    coin.find({ exchange: "safe.trade" }, function (err, coins) {
+        var count = coins.length;
+        if (count > 0) {
+            coins.forEach(element => {
+                coin.findOneAndUpdate({ address: element.address }, { price: Number(response[element.ticker.toLowerCase() + 'btc'].ticker.buy).toFixed(8).replace(/\.?0+$/, "") }, function (err) {
+                    if (err) throw err;
+                    count = count - 1;
+                    if (count == 0) {
+                        console.log('graviex');
+                        finished(1);
+                    }
+                });
+            });
+        } else {
+            console.log('graviex');
+            finished(1);
+        }
+    });
+}).catch(function (err) {
+    console.log('graviex');
+    finished(1);
+    throw err;
+});
 
+//Bitso
 rp({
     method: 'GET',
     uri: 'https://api.bitso.com/v3/ticker/?book=btc_mxn',
@@ -183,7 +215,7 @@ rp({
     throw err;
 });
 
-
+//CMC
 rp({
     method: 'GET',
     uri: 'https://api.coinmarketcap.com/v1/ticker/bitcoin',
