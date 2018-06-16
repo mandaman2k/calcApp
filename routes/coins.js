@@ -70,9 +70,19 @@ router.put('/update/:id', function (req, res, next) {
   if (coinToUpdate == 'BTC') {
     collection.update({ ticker: 'BTC' }, { $set: { "balance": coinBalance } }, function (err) {
       if (err) throw err;
-      res.send((err === null) ? {msg: ''} : {msg: 'error' + err});
+      res.send((err === null) ? { msg: '' } : { msg: 'error' + err });
     });
   }
+});
+
+router.get('/:coin', function (req, res, next) {
+  var coin = req.params.coin
+  var db = req.db;
+  var collection = db.get('coins');
+  collection.find({ ticker: coin }, {}, function (err, result) {
+    if (err) throw err;
+    res.json(result);
+  });
 });
 
 module.exports = router;
