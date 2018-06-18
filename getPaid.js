@@ -10,33 +10,30 @@ var dbCoins = db.get('coins');
 var dbPool = db.get('pools');
 var dbMined = db.get('mined');
 
-dbPool.find({}).each((pool, { close, pause, resume }) => {
-    dbCoins.find({ pool: pool.name }, {}, function (err, result) {
-        db.close();
-        result.forEach(coin => {
-            rp({
-                method: 'GET',
-                uri: pool.api + coin.address,
-                json: true
-            }).then(function (response) {
-                var now = new Date(Date.now());
-                var date = now.toLocaleString('es-MX', { timeZone: 'America/Mexico_City' }).split(' ')[0];
-                if (!response.error) {
-                    dbMined.findOneAndUpdate({ $and: [{ address: coin.address }, { [date] : {'$exists': true} }] }, { $set: { "address": coin.address, [date]: response.paid24h } }, { upsert: true }, function (err, doc, next) {
-                        db.close();
-                        console.log(doc);
-                    });
-                } else {
+dbCoins.find({}, {}, function (err, result) {
+    if(err) throw err;
+
+    result.forEach(coin => {
+        if(coin.pool == "http://bsod.pw") coin.pool = "http://api.bsod.pw";
+        rp({
+            method: 'GET',
+            uri: coin.pool + '/api/wallet?address=' + coin.address,
+            json: true
+        }).then(function (response) {
+            var now = new Date(Date.now());
+            var date = now.toLocaleString('es-MX', { timeZone: 'America/Mexico_City' }).split(' ')[0];
+            if (!response.error) {
+                dbMined.findOneAndUpdate({ $and: [{ name: coin.name }, { [date]: { '$exists': true } }] }, { $set: { "name": coin.name, [date]: response.paid24h } }, { upsert: true }, function (err, doc, next) {
                     db.close();
-                }
-            }).catch(function (err) {
+                    console.log(doc);
+                });
+            } else {
                 db.close();
-                throw err;
-            });
+            }
+        }).catch(function (err) {
+            db.close();
+            throw err;
         });
     });
-}).then(() => {
-    console.log('end');
-    // stream is over
 });
 

@@ -24,18 +24,9 @@ var coinSchema = new Schema({
     price: Number
 });
 
-var fiatSchema = new Schema({
-    name: String,
-    api: String,
-    price: Number
-});
-
 var coinModel = mongoose.model('coins', coinSchema);
 
-var fiatModel = mongoose.model('fiat', fiatSchema);
-
 var coin = coinModel;
-var fiat = fiatModel;
 //End Database
 
 var end = 0;
