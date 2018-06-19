@@ -126,7 +126,7 @@ dbCoins.find({}, {}, function (err, result) {
 
                                 var balance = lastDayBalance - currBalance;
 
-                                dbMined.update({ name: coin.name }, { $set: { "name": coin.name, [yeseterday]: currBalance } }, { upsert: true }, function (err) {
+                                dbMined.update({ name: coin.name }, { $set: { "name": coin.name, [date]: balance } }, { upsert: true }, function (err) {
                                     if (err) throw err;
                                     if (count == 0) {
                                         db.close();
