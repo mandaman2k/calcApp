@@ -83,7 +83,7 @@ dbCoins.find({}, {}, function (err, result) {
                                 var lastDayBalance = result[yeseterday];
                                 var currBalance = parseFloat(response.totalRecieved).toFixed(8);
 
-                                var balance = lastDayBalance - currBalance;
+                                var balance = currBalance - lastDayBalance;
 
                                 dbMined.update({ name: coin.name }, { $set: { "name": coin.name, [date]: balance } }, { upsert: true }, function (err) {
                                     if (err) throw err;
@@ -124,7 +124,7 @@ dbCoins.find({}, {}, function (err, result) {
                                 var lastDayBalance = result[yeseterday];
                                 var currBalance = parseFloat(response.received).toFixed(8);
 
-                                var balance = lastDayBalance - currBalance;
+                                var balance = currBalance - lastDayBalance;
 
                                 dbMined.update({ name: coin.name }, { $set: { "name": coin.name, [date]: balance } }, { upsert: true }, function (err) {
                                     if (err) throw err;
