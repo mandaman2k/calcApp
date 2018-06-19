@@ -18,6 +18,7 @@ var coinSchema = new Schema({
     ticker: String,
     address: String,
     explorer: String,
+    api: String,
     pool: String,
     exchange: String,
     balance: Number,

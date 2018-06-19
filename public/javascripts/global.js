@@ -23,8 +23,8 @@ function populateTable() {
                     tableContent += '<td class="tg-6k2t">' + this.address + '</td>';
                     tableContent += '<td class="tg-6k2t">' + Number(this.price).toFixed(8) + '</td>';
                     tableContent += '<td class="tg-6k2t">' + this.balance + '</td>';
-                    tableContent += '<td class="tg-6k2t"><a href="' + this.explorer + '/address/' + this.address + '" class="linkshowuser" rel="' + this.name + '" target="_blank">Explorer</a></td>';
-                    tableContent += '<td class="tg-6k2t"><a href="' + this.pool + '/?address=' + this.address + '" class="linkshowuser" rel="' + this.name + '" target="_blank">Pool</a></td>';
+                    tableContent += '<td class="tg-6k2t"><a href="' + this.explorer + '" target="_blank">Explorer</a></td>';
+                    tableContent += '<td class="tg-6k2t"><a href="' + this.pool + '" target="_blank">Pool</a></td>';
                     tableContent += '<td class="tg-6k2t"><a href="#" class="linkdeleteuser" rel="' + this._id + '">Borrar</a></td>';
                     tableContent += '</tr>';
                     count++;
@@ -35,8 +35,8 @@ function populateTable() {
                     tableContent += '<td class="tg-yw4l">' + this.address + '</td>';
                     tableContent += '<td class="tg-yw4l">' + Number(this.price).toFixed(8) + '</td>';
                     tableContent += '<td class="tg-yw4l">' + this.balance + '</td>';
-                    tableContent += '<td class="tg-yw4l"><a href="' + this.explorer + '/address/' + this.address + '" class="linkshowuser" rel="' + this.name + '" target="_blank">Explorer</a></td>';
-                    tableContent += '<td class="tg-yw4l"><a href="' + this.pool + '/?address=' + this.address + '" class="linkshowuser" rel="' + this.name + '" target="_blank">Pool</a></td>';
+                    tableContent += '<td class="tg-yw4l"><a href="' + this.explorer + '" target="_blank">Explorer</a></td>';
+                    tableContent += '<td class="tg-yw4l"><a href="' + this.pool + '" target="_blank">Pool</a></td>';
                     tableContent += '<td class="tg-yw4l"><a href="#" class="linkdeleteuser" rel="' + this._id + '">Borrar</a></td>';
                     tableContent += '</tr>';
                     count++;

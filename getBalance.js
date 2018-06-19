@@ -17,6 +17,7 @@ var coinSchema = new Schema({
     ticker: String,
     address: String,
     explorer: String,
+    api: String,
     pool: String,
     exchange: String,
     balance: Number,
@@ -33,12 +34,12 @@ coin.find({}, function (err, coins) {
     if (err) throw err;
     count = coins.length;
     coins.forEach(element => {
-        if (element.explorer != undefined && element.ticker != "BTC") {
+        if (element.api != undefined && element.ticker != "BTC") {
             switch (element.ticker) {
                 case "SAFE":
                     rp({
                         method: 'GET',
-                        uri: element.explorer + '/SAFE/api/balance/' + element.address,
+                        uri: element.api + '/SAFE/api/balance/' + element.address,
                         json: true,
                         followRedirect: true,
                         simple: false
@@ -76,7 +77,7 @@ coin.find({}, function (err, coins) {
                 case "RVN":
                     rp({
                         method: 'GET',
-                        uri: element.explorer + '/api/addr/' + element.address,
+                        uri: element.api + '/api/addr/' + element.address,
                         json: true,
                         followRedirect: true,
                         simple: false
@@ -114,7 +115,7 @@ coin.find({}, function (err, coins) {
                 default:
                     rp({
                         method: 'GET',
-                        uri: element.explorer + '/ext/getaddress/' + element.address,
+                        uri: element.api + '/ext/getaddress/' + element.address,
                         json: true,
                         followRedirect: true,
                         simple: false
