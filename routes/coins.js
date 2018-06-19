@@ -10,6 +10,14 @@ router.get('/list', function (req, res, next) {
   });
 });
 
+router.get('/paid', function (req, res, next) {
+  var db = req.db;
+  var collection = db.get('mined');
+  collection.find({}, { sort: { name: 1 } }, function (e, docs) {
+    res.json(docs);
+  });
+});
+
 router.get('/balance', function (req, res, next) {
   var db = req.db;
   var collection = db.get('coins');
@@ -75,8 +83,8 @@ router.put('/update/:id', function (req, res, next) {
   }
 });
 
-router.get('/:coin', function (req, res, next) {
-  var coin = req.params.coin
+router.get('/coin/:coin', function (req, res, next) {
+  var coin = req.params.coin;
   var db = req.db;
   var collection = db.get('coins');
   collection.find({ ticker: coin }, {}, function (err, result) {
