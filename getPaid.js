@@ -39,11 +39,11 @@ dbCoins.find({}, {}, function (err, result) {
 
                             if (!isNaN(response.balance)) {
                                 var lastDayBalance = result[yeseterday];
-                                var currBalance = (parseFloat(response.totalReceived).toFixed(8) / 100000000);
+                                var currBalance = parseFloat(response.totalReceived).toFixed(8);
 
                                 var balance = currBalance - lastDayBalance;
 
-                                dbMined.update({ name: coin.name }, { $set: { "name": coin.name, [date]: currBalance } }, { upsert: true }, function (err) {
+                                dbMined.update({ name: coin.name }, { $set: { "name": coin.name, [date]: balance } }, { upsert: true }, function (err) {
                                     if (err) throw err;
                                     if (count == 0) {
                                         db.close();
