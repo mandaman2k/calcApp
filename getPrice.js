@@ -45,7 +45,7 @@ rp({
     uri: 'https://www.cryptopia.co.nz/api/GetMarkets',
     json: true
 }).then(function (response) {
-    coin.find({ exchange: "cryptopia" }, function (err, coins) {
+    coin.find({ exchange: "Cryptopia" }, function (err, coins) {
         var count = coins.length;
         if (count > 0) {
             coins.forEach(element => {
@@ -53,29 +53,29 @@ rp({
                     if (err) throw err;
                     count = count - 1;
                     if (count == 0) {
-                        console.log('cryptopia');
+                        console.log('Cryptopia');
                         finished(1);
                     }
                 });
             });
         } else {
-            console.log('Error cryptopia');
+            console.log('Error Cryptopia');
             finished(1);
         }
     });
 }).catch(function (err) {
-    console.log('Error cryptopia');
+    console.log('Error Cryptopia');
     finished(1);
     throw err;
 });
 
-//CB
+//CryptoBridge
 rp({
     method: 'GET',
     uri: 'https://api.crypto-bridge.org/api/v1/ticker',
     json: true
 }).then(function (response) {
-    coin.find({ exchange: "CB" }, function (err, coins) {
+    coin.find({ exchange: "CryptoBridge" }, function (err, coins) {
         var count = coins.length;
         if (count > 0) {
             coins.forEach(element => {
@@ -83,19 +83,19 @@ rp({
                     if (err) throw err;
                     count = count - 1;
                     if (count == 0) {
-                        console.log('CB');
+                        console.log('CryptoBridge');
                         finished(1);
                     }
                 });
             });
         } else {
-            console.log('Error CB');
+            console.log('Error CryptoBridge');
             finished(1);
         }
 
     });
 }).catch(function (err) {
-    console.log('Error CB');
+    console.log('Error CryptoBridge');
     finished(1);
     throw err;
 });
@@ -106,7 +106,7 @@ rp({
     uri: 'https://stocks.exchange/api2/ticker',
     json: true
 }).then(function (response) {
-    coin.find({ exchange: "stocks.exchange" }, function (err, coins) {
+    coin.find({ exchange: "Stocks.Exchange" }, function (err, coins) {
         var count = coins.length;
         if (count > 0) {
             coins.forEach(element => {
@@ -114,18 +114,18 @@ rp({
                     if (err) throw err;
                     count = count - 1;
                     if (count == 0) {
-                        console.log('stocks.exchange');
+                        console.log('Stocks.Exchange');
                         finished(1);
                     }
                 });
             });
         } else {
-            console.log('Error stocks.exchange');
+            console.log('Error Stocks.Exchange');
             finished(1);
         }
     });
 }).catch(function (err) {
-    console.log('Error stocks.exchange');
+    console.log('Error Stocks.Exchange');
     finished(1);
     throw err;
 });
@@ -136,7 +136,7 @@ rp({
     uri: 'https://graviex.net/api/v2/tickers.json',
     json: true
 }).then(function (response) {
-    coin.find({ exchange: "graviex" }, function (err, coins) {
+    coin.find({ exchange: "Graviex" }, function (err, coins) {
         var count = coins.length;
         if (count > 0) {
             coins.forEach(element => {
@@ -144,18 +144,18 @@ rp({
                     if (err) throw err;
                     count = count - 1;
                     if (count == 0) {
-                        console.log('graviex');
+                        console.log('Graviex');
                         finished(1);
                     }
                 });
             });
         } else {
-            console.log('0 graviex');
+            console.log('0 Graviex');
             finished(1);
         }
     });
 }).catch(function (err) {
-    console.log('Error graviex');
+    console.log('Error Graviex');
     finished(1);
     throw err;
 });
@@ -166,7 +166,7 @@ rp({
     uri: 'https://safe.trade/api/v2/tickers.json',
     json: true
 }).then(function (response) {
-    coin.find({ exchange: "safe.trade" }, function (err, coins) {
+    coin.find({ exchange: "Safe.Trade" }, function (err, coins) {
         var count = coins.length;
         if (count > 0) {
             coins.forEach(element => {
@@ -174,18 +174,18 @@ rp({
                     if (err) throw err;
                     count = count - 1;
                     if (count == 0) {
-                        console.log('safe.trade');
+                        console.log('Safe.Trade');
                         finished(1);
                     }
                 });
             });
         } else {
-            console.log('Error safe.trade');
+            console.log('Error Safe.Trade');
             finished(1);
         }
     });
 }).catch(function (err) {
-    console.log('Error safe.trade');
+    console.log('Error Safe.Trade');
     finished(1);
     throw err;
 });
