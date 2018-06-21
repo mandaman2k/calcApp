@@ -70,7 +70,8 @@ function addCoin(event) {
             'address': $('#addCoin fieldset input#inputCoinAddress').val(),
             'explorer': $('#addCoin fieldset input#inputCoinExplorer').val(),
             'pool': $('#addCoin fieldset input#inputCoinPool').val(),
-            'exchange': $('#addCoin fieldset input#inputCoinExchange').val()
+            'exchange': $('#addCoin fieldset input#inputCoinExchange').val(),
+            'api': $('#addCoin fieldset input#inputCoinApi').val()
         };
 
         $.ajax({
