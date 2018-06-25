@@ -9,7 +9,7 @@ var mongo = require('mongodb');
 var monk = require('monk');
 var env = process.env.NODE_ENV || 'development';
 var config = require('./config')[env];
-var db = monk(config.database);
+var db = monk(config.database,{authSource: config.auth});
 
 var indexRouter = require('./routes/index');
 var coinsRouter = require('./routes/coins');
