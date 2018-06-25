@@ -7,7 +7,9 @@ var logger = require('morgan');
 // Database
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('localhost:27017/calc');
+var env = process.env.NODE_ENV || 'development';
+var config = require('./config')[env];
+var db = monk(config.database);
 
 var indexRouter = require('./routes/index');
 var coinsRouter = require('./routes/coins');

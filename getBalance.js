@@ -2,7 +2,9 @@ var Request = require("request");
 var rp = require('request-promise');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1/calc');
+var env = process.env.NODE_ENV || 'development';
+var config = require('./config')[env];
+mongoose.connect(config.database);
 
 mongoose.Promise = global.Promise;
 
