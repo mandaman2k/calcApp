@@ -4,7 +4,7 @@ var rp = require('request-promise');
 var mongoose = require('mongoose');
 var env = process.env.NODE_ENV || 'development';
 var config = require('./config')[env];
-mongoose.connect(config.database);
+mongoose.connect(config.database,{authSource: config.auth});
 
 mongoose.Promise = global.Promise;
 
