@@ -5,7 +5,7 @@ var rp = require('request-promise');
 var mongoose = require('mongoose');
 var env = process.env.NODE_ENV || 'development';
 var config = require('./config')[env];
-mongoose.connect(config.database,{authSource: config.auth});
+mongoose.connect(config.database, { authSource: config.auth });
 
 mongoose.Promise = global.Promise;
 
@@ -81,14 +81,24 @@ rp({
         var count = coins.length;
         if (count > 0) {
             coins.forEach(element => {
-                coin.findOneAndUpdate({ address: element.address }, { price: Number(findElement(response, "id", element.ticker + "_BTC").bid).toFixed(8).replace(/\.?0+$/, "") }, function (err) {
-                    if (err) throw err;
+                var price = findElement(response, "id", element.ticker + "_BTC");
+                if (price != undefined) {
+                    coin.findOneAndUpdate({ address: element.address }, { price: Number(price.bid).toFixed(8) }, function (err) {
+                        if (err) throw err;
+                        count = count - 1;
+                        if (count == 0) {
+                            console.log('CryptoBridge');
+                            finished(1);
+                        }
+                    });
+                } else {
                     count = count - 1;
+                    console.log('Error CryptoBridge: ' + element.ticker + ' not found');
                     if (count == 0) {
-                        console.log('CryptoBridge');
+                        console.log('Error CryptoBridge: ' + element.ticker + ' not found');
                         finished(1);
                     }
-                });
+                }
             });
         } else {
             console.log('Error CryptoBridge');
