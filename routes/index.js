@@ -25,6 +25,9 @@ router.get('/', function (req, res, next) {
             "price": "$_id.price",
             "balance": "$SUM(balance)"
           }
+        },
+        {
+          "$sort": {"ticker": 1}
         }
       ];
 
