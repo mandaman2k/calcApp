@@ -115,7 +115,7 @@ rp({
 //Stocks.Exchange
 rp({
     method: 'GET',
-    uri: 'https://stocks.exchange/api2/ticker',
+    uri: 'https://app.stocks.exchange/api2/ticker',
     json: true
 }).then(function (response) {
     coin.find({ exchange: "Stocks.Exchange" }, function (err, coins) {
