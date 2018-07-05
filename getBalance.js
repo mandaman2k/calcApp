@@ -4,7 +4,7 @@ var rp = require('request-promise');
 var mongoose = require('mongoose');
 var env = process.env.NODE_ENV || 'development';
 var config = require('./config')[env];
-mongoose.connect(config.database,{authSource: config.auth});
+mongoose.connect(config.database, { authSource: config.auth });
 
 mongoose.Promise = global.Promise;
 
@@ -41,42 +41,82 @@ coin.find({}, function (err, coins) {
                 case "BTX":
                 case "SAFE":
                 case "RVN":
-                    rp({
-                        method: 'GET',
-                        uri: element.api + '/api/addr/' + element.address + '?noTxList=1&noCache=1',
-                        json: true,
-                        followRedirect: true,
-                        simple: false
-                    }).then(function (response) {
-                        count = count - 1;
-                        console.log(count + ' ' + element.name);
-                        coin.findOne({ address: element.address }, function (err, result) {
-                            if (err) throw err;
+                    if (element.api.search("suprnova") == -1) {
+                        rp({
+                            method: 'GET',
+                            uri: element.api + '/api/addr/' + element.address + '?noTxList=1&noCache=1',
+                            json: true,
+                            followRedirect: true,
+                            simple: false
+                        }).then(function (response) {
+                            count = count - 1;
+                            console.log(count + ' ' + element.name);
+                            coin.findOne({ address: element.address }, function (err, result) {
+                                if (err) throw err;
 
-                            if (!isNaN(response.balance)) {
-                                result.balance = parseFloat(response.balance).toFixed(8);
+                                if (!isNaN(response.balance)) {
+                                    result.balance = parseFloat(response.balance).toFixed(8);
 
-                                result.save(function (err) {
-                                    if (err) throw err;
+                                    result.save(function (err) {
+                                        if (err) throw err;
+                                        if (count == 0) {
+                                            mongoose.disconnect();
+                                        }
+                                    });
+                                } else {
+                                    console.log('Error: ' + count + ' ' + element.name);
                                     if (count == 0) {
                                         mongoose.disconnect();
                                     }
-                                });
-                            } else {
-                                console.log('Error: ' + count + ' ' + element.name);
-                                if (count == 0) {
-                                    mongoose.disconnect();
                                 }
+                            });
+                        }).catch(function (err) {
+                            count = count - 1;
+                            console.log(count + ' ' + element.name);
+                            if (count == 0) {
+                                mongoose.disconnect();
                             }
+                            throw err;
                         });
-                    }).catch(function (err) {
-                        count = count - 1;
-                        console.log(count + ' ' + element.name);
-                        if (count == 0) {
-                            mongoose.disconnect();
-                        }
-                        throw err;
-                    });
+                    } else {
+                        rp({
+                            method: 'GET',
+                            uri: element.api,
+                            json: true,
+                            followRedirect: true,
+                            simple: false
+                        }).then(function (response) {
+                            count = count - 1;
+                            console.log(count + ' ' + element.name);
+                            coin.findOne({ address: element.address }, function (err, result) {
+                                if (err) throw err;
+
+                                if (!isNaN(response.getuserbalance.data.confirmed)) {
+                                    result.balance = parseFloat(response.getuserbalance.data.confirmed).toFixed(8);
+
+                                    result.save(function (err) {
+                                        if (err) throw err;
+                                        if (count == 0) {
+                                            mongoose.disconnect();
+                                        }
+                                    });
+                                } else {
+                                    console.log('Error: ' + count + ' ' + element.name);
+                                    if (count == 0) {
+                                        mongoose.disconnect();
+                                    }
+                                }
+                            });
+                        }).catch(function (err) {
+                            count = count - 1;
+                            console.log(count + ' ' + element.name);
+                            if (count == 0) {
+                                mongoose.disconnect();
+                            }
+                            throw err;
+                        });
+                    }
+
                     break;
 
                 default:
