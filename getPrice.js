@@ -209,7 +209,8 @@ rp({
     json: true,
     qs: {
         limit_bids: 1,
-        limit_asks: 1
+        limit_asks: 1,
+        format:'json'
     }
 }).then(function(response) {
     coin.find({ exchange: "BTC-ALPHA" }, function(err, coins) {
@@ -220,18 +221,18 @@ rp({
                     if (err) throw err;
                     count = count - 1;
                     if (count == 0) {
-                        console.log('Stocks.Exchange');
+                        console.log('btc-alpha');
                         finished(1);
                     }
                 });
             });
         } else {
-            console.log('Error Stocks.Exchange');
+            console.log('Error btc-alpha');
             finished(1);
         }
     });
 }).catch(function(err) {
-    console.log('Error Stocks.Exchange');
+    console.log('Error btc-alpha');
     finished(1);
     throw err;
 });
