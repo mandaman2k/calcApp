@@ -202,41 +202,6 @@ rp({
     throw err;
 });
 
-//btc-alpha
-rp({
-    method: 'GET',
-    uri: 'https://btc-alpha.com/api/v1/orderbook/XCG_BTC/',
-    json: true,
-    qs: {
-        limit_bids: 1,
-        limit_asks: 1,
-        format:'json'
-    }
-}).then(function(response) {
-    coin.find({ exchange: "BTC-ALPHA" }, function(err, coins) {
-        var count = coins.length;
-        if (count > 0) {
-            coins.forEach(element => {
-                coin.findOneAndUpdate({ address: element.address }, { price: Number(response.buy[0].price).toFixed(8).replace(/\.?0+$/, "") }, function(err) {
-                    if (err) throw err;
-                    count = count - 1;
-                    if (count == 0) {
-                        console.log('btc-alpha');
-                        finished(1);
-                    }
-                });
-            });
-        } else {
-            console.log('Error btc-alpha');
-            finished(1);
-        }
-    });
-}).catch(function(err) {
-    console.log('Error btc-alpha');
-    finished(1);
-    throw err;
-});
-
 //Bitso
 rp({
     method: 'GET',
