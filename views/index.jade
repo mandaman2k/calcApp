@@ -6,34 +6,34 @@ block content
     p#usd USD: #{CurrUsd}
     p#mxn MXN: #{CurrMxn} 
   
-  #wrapper
-    div(style='display: inline-block;')
-      h2 Coin List
-      #coinList.tg-wrap
-        table.tg
+  #wrapper.row
+    .col-xs-6
+      h2.sub-header Coin List
+      #coinList.table-responsive
+        table.table.table-sm.table-striped.table-hover
           thead
             tr
-              th.tg-us36 Name
-              th.tg-yw4l Ticker
-              th.tg-yw4l Address
-              th.tg-yw4l Price BTC
-              th.tg-yw4l Balance
-              th.tg-yw4l Explorer
-              th.tg-yw4l Pool
-              th.tg-yw4l Borrar
+              th Name
+              th Ticker
+              th Address
+              th Price BTC
+              th Balance
+              th Explorer
+              th Pool
+              th Borrar
           tbody
 
-    div(style='float: right')
-      h2 Balance
-      #coinBalance.tg-wrap
-        table.tg
+    .col-xs-6
+      h2.sub-header Balance
+      #coinBalance.table-responsive
+        table.table.table-sm.table-striped.table-hover
           thead
             tr
-              th.tg-us36 Ticker
-              th.tg-yw4l Balance
-              th.tg-yw4l BTC
-              th.tg-yw4l USD
-              th.tg-yw4l MXN
+              th Ticker
+              th Balance
+              th BTC
+              th USD
+              th MXN
           tbody
             - var sumbtc=0
             - var sumusd=0
@@ -66,25 +66,27 @@ block content
               td
                 b= summxn
 
-  h2 Agregar Moneda
-  #addCoin
-    fieldset
-      input#inputCoinName(type='text', placeholder='Nombre')
-      input#inputCoinTicker(type='text', placeholder='Ticker')
-      br
-      input#inputCoinAddress(type='text', placeholder='Address')
-      input#inputCoinExplorer(type='text', placeholder='Explorer')
-      input#inputCoinApi(type='text', placeholder='Api')
-      br
-      input#inputCoinPool(type='text', placeholder='Pool')
-      input#inputCoinExchange(type='text', placeholder='Exchange')
-      br
-      button#btnAddUser Add Coin
+  .row
+    #addCoin
+      h2.sub-header Agregar Moneda
+      fieldset
+        input#inputCoinName(type='text', placeholder='Nombre')
+        input#inputCoinTicker(type='text', placeholder='Ticker')
+        br
+        input#inputCoinAddress(type='text', placeholder='Address')
+        input#inputCoinExplorer(type='text', placeholder='Explorer')
+        input#inputCoinApi(type='text', placeholder='Api')
+        br
+        input#inputCoinPool(type='text', placeholder='Pool')
+        input#inputCoinExchange(type='text', placeholder='Exchange')
+        br
+        button#btnAddUser Add Coin
 
-  h2 Actualizar BTC
-  #updateCoin
-    fieldset
-      input#inputCoinName(type='text', value='BTC', disabled)
-      input#inputCoinBalance(type='text', placeholder='Balance')
-      br
-      button#btnActualizar Actaulizar
+    #updateCoin
+      h2.sub-header Actualizar BTC
+      fieldset
+        input#inputCoinName(type='text', value='BTC', disabled)
+        input#inputCoinBalance(type='text', placeholder='Balance')
+        br
+        button#btnActualizar Actaulizar
+                

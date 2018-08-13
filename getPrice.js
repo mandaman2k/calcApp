@@ -46,12 +46,12 @@ rp({
     method: 'GET',
     uri: 'https://www.cryptopia.co.nz/api/GetMarkets',
     json: true
-}).then(function (response) {
-    coin.find({ exchange: "Cryptopia" }, function (err, coins) {
+}).then(function(response) {
+    coin.find({ exchange: "Cryptopia" }, function(err, coins) {
         var count = coins.length;
         if (count > 0) {
             coins.forEach(element => {
-                coin.findOneAndUpdate({ address: element.address }, { price: parseFloat(findElement(response.Data, "Label", element.ticker + "/BTC").BidPrice).toFixed(8) }, function (err) {
+                coin.findOneAndUpdate({ address: element.address }, { price: parseFloat(findElement(response.Data, "Label", element.ticker + "/BTC").BidPrice).toFixed(8) }, function(err) {
                     if (err) throw err;
                     count = count - 1;
                     if (count == 0) {
@@ -65,7 +65,7 @@ rp({
             finished(1);
         }
     });
-}).catch(function (err) {
+}).catch(function(err) {
     console.log('Error Cryptopia');
     finished(1);
     throw err;
@@ -76,14 +76,14 @@ rp({
     method: 'GET',
     uri: 'https://api.crypto-bridge.org/api/v1/ticker',
     json: true
-}).then(function (response) {
-    coin.find({ exchange: "CryptoBridge" }, function (err, coins) {
+}).then(function(response) {
+    coin.find({ exchange: "CryptoBridge" }, function(err, coins) {
         var count = coins.length;
         if (count > 0) {
             coins.forEach(element => {
                 var price = findElement(response, "id", element.ticker + "_BTC");
                 if (price != undefined) {
-                    coin.findOneAndUpdate({ address: element.address }, { price: Number(price.bid).toFixed(8) }, function (err) {
+                    coin.findOneAndUpdate({ address: element.address }, { price: Number(price.bid).toFixed(8) }, function(err) {
                         if (err) throw err;
                         count = count - 1;
                         if (count == 0) {
@@ -106,7 +106,7 @@ rp({
         }
 
     });
-}).catch(function (err) {
+}).catch(function(err) {
     console.log('Error CryptoBridge');
     finished(1);
     throw err;
@@ -117,12 +117,12 @@ rp({
     method: 'GET',
     uri: 'https://app.stocks.exchange/api2/ticker',
     json: true
-}).then(function (response) {
-    coin.find({ exchange: "Stocks.Exchange" }, function (err, coins) {
+}).then(function(response) {
+    coin.find({ exchange: "Stocks.Exchange" }, function(err, coins) {
         var count = coins.length;
         if (count > 0) {
             coins.forEach(element => {
-                coin.findOneAndUpdate({ address: element.address }, { price: Number(findElement(response, "market_name", element.ticker + "_BTC").bid).toFixed(8).replace(/\.?0+$/, "") }, function (err) {
+                coin.findOneAndUpdate({ address: element.address }, { price: Number(findElement(response, "market_name", element.ticker + "_BTC").bid).toFixed(8).replace(/\.?0+$/, "") }, function(err) {
                     if (err) throw err;
                     count = count - 1;
                     if (count == 0) {
@@ -136,7 +136,7 @@ rp({
             finished(1);
         }
     });
-}).catch(function (err) {
+}).catch(function(err) {
     console.log('Error Stocks.Exchange');
     finished(1);
     throw err;
@@ -147,12 +147,12 @@ rp({
     method: 'GET',
     uri: 'https://graviex.net/api/v2/tickers.json',
     json: true
-}).then(function (response) {
-    coin.find({ exchange: "Graviex" }, function (err, coins) {
+}).then(function(response) {
+    coin.find({ exchange: "Graviex" }, function(err, coins) {
         var count = coins.length;
         if (count > 0) {
             coins.forEach(element => {
-                coin.findOneAndUpdate({ address: element.address }, { price: Number(response[element.ticker.toLowerCase() + 'btc'].ticker.buy).toFixed(8).replace(/\.?0+$/, "") }, function (err) {
+                coin.findOneAndUpdate({ address: element.address }, { price: Number(response[element.ticker.toLowerCase() + 'btc'].ticker.buy).toFixed(8).replace(/\.?0+$/, "") }, function(err) {
                     if (err) throw err;
                     count = count - 1;
                     if (count == 0) {
@@ -166,7 +166,7 @@ rp({
             finished(1);
         }
     });
-}).catch(function (err) {
+}).catch(function(err) {
     console.log('Error Graviex');
     finished(1);
     throw err;
@@ -177,12 +177,12 @@ rp({
     method: 'GET',
     uri: 'https://safe.trade/api/v2/tickers.json',
     json: true
-}).then(function (response) {
-    coin.find({ exchange: "Safe.Trade" }, function (err, coins) {
+}).then(function(response) {
+    coin.find({ exchange: "Safe.Trade" }, function(err, coins) {
         var count = coins.length;
         if (count > 0) {
             coins.forEach(element => {
-                coin.findOneAndUpdate({ address: element.address }, { price: Number(response[element.ticker.toLowerCase() + 'btc'].ticker.buy).toFixed(8).replace(/\.?0+$/, "") }, function (err) {
+                coin.findOneAndUpdate({ address: element.address }, { price: Number(response[element.ticker.toLowerCase() + 'btc'].ticker.buy).toFixed(8).replace(/\.?0+$/, "") }, function(err) {
                     if (err) throw err;
                     count = count - 1;
                     if (count == 0) {
@@ -196,8 +196,42 @@ rp({
             finished(1);
         }
     });
-}).catch(function (err) {
+}).catch(function(err) {
     console.log('Error Safe.Trade');
+    finished(1);
+    throw err;
+});
+
+//btc-alpha
+rp({
+    method: 'GET',
+    uri: 'https://btc-alpha.com/api/v1/orderbook/XCG_BTC/',
+    json: true,
+    qs: {
+        limit_bids: 1,
+        limit_asks: 1
+    }
+}).then(function(response) {
+    coin.find({ exchange: "BTC-ALPHA" }, function(err, coins) {
+        var count = coins.length;
+        if (count > 0) {
+            coins.forEach(element => {
+                coin.findOneAndUpdate({ address: element.address }, { price: Number(response.buy[0].price).toFixed(8).replace(/\.?0+$/, "") }, function(err) {
+                    if (err) throw err;
+                    count = count - 1;
+                    if (count == 0) {
+                        console.log('Stocks.Exchange');
+                        finished(1);
+                    }
+                });
+            });
+        } else {
+            console.log('Error Stocks.Exchange');
+            finished(1);
+        }
+    });
+}).catch(function(err) {
+    console.log('Error Stocks.Exchange');
     finished(1);
     throw err;
 });
@@ -207,13 +241,13 @@ rp({
     method: 'GET',
     uri: 'https://api.bitso.com/v3/ticker/?book=btc_mxn',
     json: true
-}).then(function (response) {
-    coin.findOneAndUpdate({ name: "MXN" }, { $set: { price: parseFloat(response.payload.bid).toFixed(2) } }, function (err) {
+}).then(function(response) {
+    coin.findOneAndUpdate({ name: "MXN" }, { $set: { price: parseFloat(response.payload.bid).toFixed(2) } }, function(err) {
         if (err) throw err;
         console.log('MXN');
         finished(1);
     });
-}).catch(function (err) {
+}).catch(function(err) {
     console.log('Error MXN');
     finished(1);
     throw err;
@@ -224,13 +258,13 @@ rp({
     method: 'GET',
     uri: 'https://api.coinmarketcap.com/v1/ticker/bitcoin',
     json: true
-}).then(function (response) {
-    coin.findOneAndUpdate({ name: "USD" }, { price: parseFloat(response[0].price_usd).toFixed(2) }, function (err) {
+}).then(function(response) {
+    coin.findOneAndUpdate({ name: "USD" }, { price: parseFloat(response[0].price_usd).toFixed(2) }, function(err) {
         if (err) throw err;
         console.log('USD');
         finished(1);
     });
-}).catch(function (err) {
+}).catch(function(err) {
     console.log('Error USD');
     finished(1);
     throw err;

@@ -16,31 +16,16 @@ function populateTable() {
         var count = 1;
         $.each(data, function () {
             if (this.ticker != 'MXN' && this.ticker != 'USD' && this.ticker != 'BTC') {
-                if (isEven(count)) {
-                    tableContent += '<tr>';
-                    tableContent += '<td class="tg-6k2t"><b>' + this.name + '</b<</td>';
-                    tableContent += '<td class="tg-6k2t">' + this.ticker + '</td>';
-                    tableContent += '<td class="tg-6k2t">' + this.address + '</td>';
-                    tableContent += '<td class="tg-6k2t">' + Number(this.price).toFixed(8) + '</td>';
-                    tableContent += '<td class="tg-6k2t">' + this.balance + '</td>';
-                    tableContent += '<td class="tg-6k2t"><a href="' + this.explorer + '" target="_blank">Explorer</a></td>';
-                    tableContent += '<td class="tg-6k2t"><a href="' + this.pool + '" target="_blank">Pool</a></td>';
-                    tableContent += '<td class="tg-6k2t"><a href="#" class="linkdeleteuser" rel="' + this._id + '">Borrar</a></td>';
-                    tableContent += '</tr>';
-                    count++;
-                } else {
-                    tableContent += '<tr>';
-                    tableContent += '<td class="tg-yw4l"><b>' + this.name + '</b></td>';
-                    tableContent += '<td class="tg-yw4l">' + this.ticker + '</td>';
-                    tableContent += '<td class="tg-yw4l">' + this.address + '</td>';
-                    tableContent += '<td class="tg-yw4l">' + Number(this.price).toFixed(8) + '</td>';
-                    tableContent += '<td class="tg-yw4l">' + this.balance + '</td>';
-                    tableContent += '<td class="tg-yw4l"><a href="' + this.explorer + '" target="_blank">Explorer</a></td>';
-                    tableContent += '<td class="tg-yw4l"><a href="' + this.pool + '" target="_blank">Pool</a></td>';
-                    tableContent += '<td class="tg-yw4l"><a href="#" class="linkdeleteuser" rel="' + this._id + '">Borrar</a></td>';
-                    tableContent += '</tr>';
-                    count++;
-                }
+                tableContent += '<tr>';
+                tableContent += '<td class="tg-6k2t"><b>' + this.name + '</b<</td>';
+                tableContent += '<td class="tg-6k2t">' + this.ticker + '</td>';
+                tableContent += '<td class="tg-6k2t">' + this.address + '</td>';
+                tableContent += '<td class="tg-6k2t">' + Number(this.price).toFixed(8) + '</td>';
+                tableContent += '<td class="tg-6k2t">' + this.balance + '</td>';
+                tableContent += '<td class="tg-6k2t"><a href="' + this.explorer + '" target="_blank">Explorer</a></td>';
+                tableContent += '<td class="tg-6k2t"><a href="' + this.pool + '" target="_blank">Pool</a></td>';
+                tableContent += '<td class="tg-6k2t"><a href="#" class="linkdeleteuser" rel="' + this._id + '">Borrar</a></td>';
+                tableContent += '</tr>';
             }
         });
 
@@ -59,9 +44,9 @@ function addCoin(event) {
     event.preventDefault();
 
     var errorCount = 0;
-    $('#addCoin input').each(function (index, val) {
-        if ($(this).val() === '') { errorCount++; }
-    });
+    /*     $('#addCoin input').each(function (index, val) {
+            if ($(this).val() === '') { errorCount++; }
+        }); */
 
     if (errorCount === 0) {
         var newCoin = {
