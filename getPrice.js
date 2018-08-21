@@ -202,6 +202,45 @@ rp({
     throw err;
 });
 
+//CREX24
+rp({
+    method: 'GET',
+    uri: 'https://api.crex24.com/v2/public/tickers',
+    json: true
+}).then(function(response) {
+    coin.find({ exchange: "Crex24" }, function(err, coins) {
+        var count = coins.length;
+        if (count > 0) {
+            coins.forEach(element => {
+                var price = findElement(response, "instrument", element.ticker + "-BTC");
+                if (price != undefined) {
+                    coin.findOneAndUpdate({ address: element.address }, { price: Number(price.bid).toFixed(8) }, function(err) {
+                        if (err) throw err;
+                        count = count - 1;
+                        if (count == 0) {
+                            console.log('Crex24');
+                            finished(1);
+                        }
+                    });
+                } else {
+                    count = count - 1;
+                    console.log('Error Crex24: ' + element.ticker + ' not found');
+                    if (count == 0) {
+                        console.log('Error Crex24: ' + element.ticker + ' not found');
+                        finished(1);
+                    }
+                }
+            });
+        } else {
+            console.log('Error Crex24');
+            finished(1);
+        }
+    });
+}).catch(function(err) {
+    console.log('Error CryptoBridge');
+    finished(1);
+    throw err;
+});
 //Bitso
 rp({
     method: 'GET',
