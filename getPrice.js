@@ -241,6 +241,7 @@ rp({
     finished(1);
     throw err;
 });
+
 //Bitso
 rp({
     method: 'GET',
@@ -261,10 +262,10 @@ rp({
 //CMC
 rp({
     method: 'GET',
-    uri: 'https://api.coinmarketcap.com/v1/ticker/bitcoin',
+    uri: 'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD',
     json: true
 }).then(function(response) {
-    coin.findOneAndUpdate({ name: "USD" }, { price: parseFloat(response[0].price_usd).toFixed(2) }, function(err) {
+    coin.findOneAndUpdate({ name: "USD" }, { price: parseFloat(response.USD).toFixed(2) }, function(err) {
         if (err) throw err;
         console.log('USD');
         finished(1);
